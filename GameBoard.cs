@@ -45,6 +45,7 @@ namespace ConsoleApp1
             int rowToUpdate = 0;
             if (Char.IsDigit(playerMoveCharacters[0]))
             {
+                // Convert char to int
                 rowToUpdate = playerMoveCharacters[0] - '0';
                 columnToUpdate = playerMoveCharacters[1];
                 if (columnToUpdate == 'C')
@@ -54,6 +55,7 @@ namespace ConsoleApp1
             }
             else
             {
+                // Convert char to int
                 rowToUpdate = playerMoveCharacters[1] - '0';
                 columnToUpdate = playerMoveCharacters[0];
                 if (columnToUpdate == 'A')

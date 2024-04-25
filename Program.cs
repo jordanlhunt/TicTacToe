@@ -1,5 +1,4 @@
-﻿using ConsoleApp1;
-using System;
+﻿using System;
 
 namespace TicTacToe
 {
@@ -7,13 +6,10 @@ namespace TicTacToe
     {
         static void Main(string[] args)
         {
-            GameBoard gameBoard = new GameBoard();
-            gameBoard.PrintGameBoard();
+            GameManager gameManager = new GameManager();
+            gameManager.PlayGame();
+            Console.ReadLine();
 
-            string playerMove;
-            Console.WriteLine("Input Movement: ");
-            playerMove = Console.ReadLine();
-            gameBoard.UpdateGameBoard(playerMove);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace ConsoleApp1
 {
     enum GameBoardColumns
@@ -11,12 +10,18 @@ namespace ConsoleApp1
     class GameBoard
     {
         #region Attributes
-        string[,] gameBoard;
+        string[,] playBoard;
+        #endregion
+        #region Properties
+        public string[,] PlayBoard
+        {
+            get => playBoard;
+        }
         #endregion
         #region Constructor
         public GameBoard()
         {
-            gameBoard = new string[,] {
+            playBoard = new string[,] {
                 {"","   A "," B "," C"},
                 {"1 ","|_|","|_|","|_|" },
                 {"2 ","|_|","|_|","|_|" },
@@ -24,55 +29,104 @@ namespace ConsoleApp1
             };
         }
         #endregion
-
         #region Public Methods
         public void PrintGameBoard()
         {
-            for (int row = 0; row < gameBoard.GetLength(0); row++)
+            Console.WriteLine();
+            for (int row = 0; row < playBoard.GetLength(0); row++)
             {
-                for (int column = 0; column < gameBoard.GetLength(1); column++)
+                for (int column = 0; column < playBoard.GetLength(1); column++)
                 {
-                    Console.Write(gameBoard[row, column]);
+                    Console.Write(playBoard[row, column]);
                 }
                 Console.WriteLine();
             }
         }
-
-        public void UpdateGameBoard(string playerMove)
+        public void UpdateGameBoard(string move, char marker)
         {
-            char[] playerMoveCharacters = playerMove.ToCharArray();
+            char[] moveCharacters = move.ToCharArray();
             int columnToUpdate = 0;
             int rowToUpdate = 0;
-            if (Char.IsDigit(playerMoveCharacters[0]))
+            if (char.IsDigit(moveCharacters[0]))
             {
                 // Convert char to int
-                rowToUpdate = playerMoveCharacters[0] - '0';
-                columnToUpdate = playerMoveCharacters[1];
-                if (columnToUpdate == 'C')
-                {
-                    columnToUpdate = (int)GameBoardColumns.C;
-                }
+                rowToUpdate = moveCharacters[0] - '0';
+                columnToUpdate = ConvertInputColumn(moveCharacters[1]);
             }
             else
             {
                 // Convert char to int
-                rowToUpdate = playerMoveCharacters[1] - '0';
-                columnToUpdate = playerMoveCharacters[0];
-                if (columnToUpdate == 'A')
-                {
-                    columnToUpdate = (int)GameBoardColumns.A;
-                }
-                else if (columnToUpdate == 'B')
-                {
-                    columnToUpdate = (int)GameBoardColumns.B;
-                }
-                else
-                {
-                    columnToUpdate = (int)GameBoardColumns.C;
-                }
+                rowToUpdate = moveCharacters[1] - '0';
+                columnToUpdate = ConvertInputColumn(moveCharacters[0]);
             }
-            gameBoard[rowToUpdate, columnToUpdate] = "|X|";
+            playBoard[rowToUpdate, columnToUpdate] = "|" + marker + "|";
             PrintGameBoard();
+        }
+        public int ConvertInputColumn(char someChar)
+        {
+            if (someChar == 'A')
+            {
+                return (int)GameBoardColumns.A;
+            }
+            else if (someChar == 'B')
+            {
+                return (int)GameBoardColumns.B;
+            }
+            else
+            {
+                return (int)GameBoardColumns.C;
+            }
+        }
+        public bool CheckForWin()
+        {
+            string markerX = "|X|";
+            string markerO = "|O|";
+            // Straight line
+            if (StraightLineHorizontalWin(markerO) || StraightLineHorizontalWin(markerX))
+            {
+                Console.Write("[CheckForWin() // HorizontalWin] - Winner");
+                return true;
+            }
+            else if (StraightLineHorizontalWin(markerO) || StraightLineVerticalWin(markerX))
+            {
+                Console.Write("[CheckForWin() // VerticalWin] - Winner");
+                return true;
+            }
+            return false;
+        }
+        #endregion
+        #region Private Methods
+        private bool StraightLineHorizontalWin(string marker)
+        {
+            if (playBoard[1, 1] == marker && playBoard[1, 2] == marker && playBoard[1, 3] == marker)
+            {
+                return true;
+            }
+            if (playBoard[2, 1] == marker && playBoard[2, 2] == marker && playBoard[2, 3] == marker)
+            {
+                return true;
+            }
+            if (playBoard[3, 1] == marker && playBoard[3, 2] == marker && playBoard[3, 3] == marker)
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool StraightLineVerticalWin(string marker)
+        {
+            if (playBoard[1, 1] == marker && playBoard[2, 1] == marker && playBoard[3, 1] == marker)
+            {
+                return true;
+            }
+            if (playBoard[1, 2] == marker && playBoard[2, 2] == marker && playBoard[3, 2] == marker)
+            {
+                return true;
+            }
+            if (playBoard[1, 3] == marker && playBoard[2, 3] == marker && playBoard[3, 3] == marker)
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
     }
